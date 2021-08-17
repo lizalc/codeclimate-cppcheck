@@ -7,7 +7,6 @@ class Workspace:
     def __init__(self, include_paths):
         self.include_paths = include_paths
 
-
     def calculate(self):
         paths = []
 
@@ -19,10 +18,8 @@ class Workspace:
 
         return paths
 
-
     def should_include(self, name):
         return name.lower().endswith(tuple(SRC_SUFFIX))
-
 
     def _walk(self, path):
         paths = []

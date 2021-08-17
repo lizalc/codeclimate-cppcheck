@@ -1,5 +1,6 @@
 class Command:
     """Returns command line arguments by parsing codeclimate config file."""
+
     def __init__(self, config, file_list_path):
         self.config = config
         self.file_list_path = file_list_path
@@ -15,6 +16,9 @@ class Command:
 
         if self.config.get('language'):
             command.append('--language={}'.format(self.config.get('language')))
+
+        for addon in self.config.get('addons', []):
+            command.append('--addon={}'.format(addon))
 
         for identifier in self.config.get('stds', []):
             command.append('--std={}'.format(identifier))
@@ -35,14 +39,16 @@ class Command:
             if self.config.get('max_configs') == 'force':
                 command.append('--force')
             else:
-                command.append('--max-configs={}'.format(self.config.get('max_configs')))
+                command.append(
+                    '--max-configs={}'.format(self.config.get('max_configs')))
 
         if self.config.get('inconclusive', 'true') == 'true':
             command.append('--inconclusive')
-            
+
         if self.config.get('suppressions-list'):
-            command.append('--suppressions-list={}'.format(self.config.get('suppressions-list')))
-        
+            command.append(
+                '--suppressions-list={}'.format(self.config.get('suppressions-list')))
+
         if self.config.get('inline-suppr', 'false') == 'true':
             command.append('--inline-suppr')
 

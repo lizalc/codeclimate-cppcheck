@@ -23,7 +23,7 @@ Like the `cppcheck` command line tool itself, you can configure various
 aspects of the static analysis. Right now, the following options are supported
 in `.codeclimate.yml`:
 
-* `check`: issue categories to check. 
+* `check`: issue categories to check.
   By default, no additional checks are enabled.
   Available values are: `all`, `warning`, `style`, `performance`, `portability`,
   `information`, `unusedFunction`, etc.
@@ -57,7 +57,7 @@ in `.codeclimate.yml`:
   Refer to the `--inconclusive` option of `cppcheck` for more information.
 * `suppressions-list`: suppress warnings listed in the file.
   Refer to the `--suppressions-list` option of `cppcheck` for more information.
-* `inline-suppr`: allow suppression of warnings with inline comments, 
+* `inline-suppr`: allow suppression of warnings with inline comments,
   for example: `// cppcheck-suppress arrayIndexOutOfBounds`.
   Refer to the `--inline-suppr` option of `cppcheck` for more information
 

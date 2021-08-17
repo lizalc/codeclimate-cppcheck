@@ -1,7 +1,9 @@
 class IssueFormatter:
     """Converts a cppcheck error into a codeclimate issue."""
-    def __init__(self, node):
+
+    def __init__(self, node, misra_blockers):
         self.node = node
+        self.misra_blockers = misra_blockers
 
     def format(self):
         if len(self.node) == 0:
@@ -12,18 +14,24 @@ class IssueFormatter:
         issue = {}
         issue['type'] = 'issue'
         issue['check_name'] = self.node.get('id')
-        issue['description'] = self.node.get('msg').replace("'", "`")
 
         issue['content'] = {}
-        issue['content']['body'] = self.node.get('verbose').replace("'", "`");
+        issue['content']['body'] = self.node.get('verbose').replace("'", "`")
         if self.node.get('cwe'):
             # Include CWE link for detailed information.
             issue['content']['body'] += (
                 ' ([detailed CWE explanation](https://cwe.mitre.org/data/'
                 'definitions/{}.html))'.format(self.node.get('cwe')))
 
+        issue['description'] = '[{}] '.format(self.node.get('id'))
+        issue['description'] += issue['content']['body']
+
+        has_violation = False
+        if issue['check_name'] in self.misra_blockers:
+            has_violation = True
+
         category, issue['severity'] = (
-            self._derive_category_and_severity(self.node.get('severity')))
+            self._derive_category_and_severity(self.node.get('severity'), has_violation))
         issue['categories'] = [category]
 
         issue['location'] = self._convert_location(self.node[0])
@@ -50,20 +58,19 @@ class IssueFormatter:
 
         return location
 
-
-    def _derive_category_and_severity(self, severity):
+    def _derive_category_and_severity(self, severity, violation):
         """Derives codeclimate issue category & severity from cppcheck severity."""
         # http://cppcheck.sourceforge.net/devinfo/doxyoutput/classSeverity.html
         # https://github.com/codeclimate/spec/blob/master/SPEC.md
-        if severity == 'error':
-            return ('Performance', 'critical')
+        if violation or severity == 'error':
+            return ('Performance', 'blocker')
         if severity == 'warning':
-            return ('Bug Risk', 'normal')
+            return ('Bug Risk', 'critical')
         if severity == 'style':
-            return ('Style', 'normal')
+            return ('Style', 'minor')
         if severity == 'performance':
-            return ('Performance', 'normal')
+            return ('Performance', 'minor')
         if severity == 'portability':
-            return ('Compatibility', 'normal')
+            return ('Compatibility', 'minor')
         if severity == 'none' or severity == 'information' or severity == 'debug':
             return ('Clarity', 'info')

@@ -14,9 +14,9 @@ CONFIG_FILE_PATH = '/config.json'
 
 class Runner:
     """Runs cppcheck, collects and reports results."""
+
     def __init__(self):
         self._config = None
-
 
     def run(self):
         config = self._decode_config()
@@ -28,11 +28,12 @@ class Runner:
         if not len(workspace_files) > 0:
             return
 
-        self._print_debug('[cppcheck] analyzing {} files'.format(len(workspace_files)))
+        self._print_debug(
+            '[cppcheck] analyzing {} files'.format(len(workspace_files)))
 
         file_list_path = self._build_file_list(workspace_files)
-        plugin_config = config.get('config', {})
-        command = Command(plugin_config, file_list_path).build()
+        self._config = config.get('config', {})
+        command = Command(self._config, file_list_path).build()
 
         self._print_debug('[cppcheck] command: {}'.format(command))
 
@@ -46,12 +47,10 @@ class Runner:
             if issue and workspace.should_include(issue["location"]["path"]):
                 print('{}\0'.format(json.dumps(issue)))
 
-
     def _decode_config(self):
         contents = open(CONFIG_FILE_PATH).read()
 
         return json.loads(contents)
-
 
     def _build_file_list(self, workspace_files):
         _, path = tempfile.mkstemp()
@@ -62,11 +61,10 @@ class Runner:
 
         return path
 
-
     def _run_command(self, command):
         process = subprocess.Popen(command,
-                             stdout=subprocess.PIPE,
-                             stderr=subprocess.PIPE)
+                                   stdout=subprocess.PIPE,
+                                   stderr=subprocess.PIPE)
 
         _stdout, stderr = process.communicate()
 
@@ -76,19 +74,20 @@ class Runner:
 
         return stderr
 
-
     def _parse_results(self, results):
         root = etree.fromstring(results)
         issues = []
+        misra_blockers = []
+        for identifier in self._config.get('misra_blockers', []):
+            misra_blockers.append(identifier)
 
         for node in root:
             if node.tag == 'errors':
                 for error in node:
-                    issue = IssueFormatter(error).format()
+                    issue = IssueFormatter(error, misra_blockers).format()
                     issues.append(issue)
 
         return issues
-
 
     def _print_debug(self, message):
         print(message, file=sys.stderr)

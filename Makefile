@@ -1,6 +1,9 @@
 .PHONY: image
 
-IMAGE_NAME ?= codeclimate/codeclimate-cppcheck
+IMAGE_NAME ?= ghcr.io/lizalc/codeclimate-cppcheck-addons
 
 image:
-	docker build --rm -t $(IMAGE_NAME) .
+	docker build --platform linux/amd64 --rm -t $(IMAGE_NAME) .
+
+clean:
+	docker rmi $(IMAGE_NAME)
