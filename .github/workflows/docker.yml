@@ -29,4 +29,4 @@ jobs:
           push: true
           tags: |
             ghcr.io/lizalc/codeclimate/codeclimate-cppcheck-addons:latest
-            ghcr.io/lizalc/codeclimate/codeclimate-cppcheck-addons:1.0.1
+            ghcr.io/lizalc/codeclimate/codeclimate-cppcheck-addons:1.1.0
