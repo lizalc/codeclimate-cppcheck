@@ -20,8 +20,11 @@ class IssueFormatter:
         if self.node.get('cwe'):
             # Include CWE link for detailed information.
             issue['content']['body'] += (
-                ' ([detailed CWE explanation](https://cwe.mitre.org/data/'
-                'definitions/{}.html))'.format(self.node.get('cwe')))
+                ' (<a href="https://cwe.mitre.org/data/definitions/{}.html">'
+                'detailed CWE explanation</a>)'.format(self.node.get('cwe')))
+
+        if self.node.get('inconclusive', 'false') == 'true':
+            issue['description'] = 'Inconclusive: '
 
         issue['description'] = '[{}] '.format(self.node.get('id'))
         issue['description'] += issue['content']['body']
