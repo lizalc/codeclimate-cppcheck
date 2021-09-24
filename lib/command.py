@@ -48,7 +48,11 @@ class Command:
         if self.config.get('suppressions-list'):
             command.append(
                 '--suppressions-list={}'.format(self.config.get('suppressions-list')))
-
+        
+        if self.config.get('suppressions-xml'):
+            command.append(
+                '--suppress-xml={}'.format(self.config.get('suppressions-xml')))
+        
         if self.config.get('inline-suppr', 'false') == 'true':
             command.append('--inline-suppr')
 
