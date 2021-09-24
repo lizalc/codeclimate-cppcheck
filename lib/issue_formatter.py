@@ -19,9 +19,8 @@ class IssueFormatter:
         issue['content']['body'] = self.node.get('verbose').replace("'", "`")
         if self.node.get('cwe'):
             # Include CWE link for detailed information.
-            issue['content']['body'] += (
-                ' (<a href="https://cwe.mitre.org/data/definitions/{}.html">'
-                'detailed CWE explanation</a>)'.format(self.node.get('cwe')))
+            issue['content']['body'] += ' (CWE {0}: https://cwe.mitre.org/data/definitions/{0}.html)'.format(
+                self.node.get('cwe'))
 
         if self.node.get('inconclusive', 'false') == 'true':
             issue['description'] = 'Inconclusive: '
