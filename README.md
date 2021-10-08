@@ -1,6 +1,6 @@
-# Code Climate Cppcheck Engine
+# Code Climate Cppcheck Addons Engine
 
-`codeclimate-cppcheck` is a Code Climate engine that wraps [Cppcheck][cppcheck].
+`codeclimate-cppcheck-addons` is a Code Climate engine that wraps [Cppcheck][cppcheck].
 You can run it on your command line using the Code Climate CLI, or on our
 hosted analysis platform.
 
@@ -23,6 +23,12 @@ Like the `cppcheck` command line tool itself, you can configure various
 aspects of the static analysis. Right now, the following options are supported
 in `.codeclimate.yml`:
 
+* `addons`: addons to include.
+  By default, no addons are enabled.
+  Refer to the `--addon` option of `cppcheck` for more information.
+* `misra_blockers`: MISRA rules to mark as `blocker` if violated.
+  By default, rules use `cppcheck` defaults.
+  Use to highlight rules that _must_ not be violated.
 * `check`: issue categories to check.
   By default, no additional checks are enabled.
   Available values are: `all`, `warning`, `style`, `performance`, `portability`,
@@ -57,6 +63,8 @@ in `.codeclimate.yml`:
   Refer to the `--inconclusive` option of `cppcheck` for more information.
 * `suppressions-list`: suppress warnings listed in the file.
   Refer to the `--suppressions-list` option of `cppcheck` for more information.
+* `suppressions-xml`: suppress warnings listed in XML file.
+  Refer to the `--suppressions-xml` option of `cppcheck` for more information.
 * `inline-suppr`: allow suppression of warnings with inline comments,
   for example: `// cppcheck-suppress arrayIndexOutOfBounds`.
   Refer to the `--inline-suppr` option of `cppcheck` for more information
@@ -68,25 +76,29 @@ An example `.codeclimate.yml` file:
 ```yaml
 version: "2"
 plugins:
-  cppcheck:
+  cppcheck-addons:
     enabled: true
     config:
       check: all
       project: compile_commands.json
-      language: c++
+      language: c
       stds:
-        - c++11
-      platform: unix64
+        - c89
+      platform: mips32
+      addons:
+        - misra.json
+      misra_blockers:
+        - misra-c2012-17.2
       defines:
-      - "DEBUG=1"
-      - "__cplusplus"
+        - "DEBUG=1"
       undefines:
-      - "DEBUG"
+        - "DEBUG"
       includes:
-      - include/
+        - include/
       max_configs: 42
       inconclusive: false
       suppressions-list: .cppcheck-suppressions
+      suppressions-xml: .cppcheck-suppressions.xml
       inline-suppr: true
 ```
 

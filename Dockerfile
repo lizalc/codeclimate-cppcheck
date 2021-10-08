@@ -4,7 +4,7 @@ LABEL org.opencontainers.image.source=https://github.com/lizalc/codeclimate-cppc
 
 WORKDIR /usr/src/app
 
-RUN apk --update add --no-cache --upgrade \
+RUN apk --update add --no-cache --upgrade --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community \
   cppcheck \
   python3 \
   py3-lxml && \
