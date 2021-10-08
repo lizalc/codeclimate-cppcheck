@@ -9,13 +9,15 @@ hosted analysis platform.
 ## Installation
 
 1. If you haven't already, [install the Code Climate CLI][codeclimate-cli].
-2. [optional] Run `codeclimate engines:install cppcheck` to install the Code
-   Climate Cppcheck engine.
-3. Configure your `.codeclimate.yml` file. See example below.
-4. You're ready to analyze! Browse into your project's folder and run
-   `codeclimate analyze`. If you skipped step 2, the Cppcheck engine will
-   automatically be installed at this point, assuming it's enabled in
-   `.codeclimate.yml`.
+2. Pull the [`codeclimate-cppcheck-addons`][cppcheck-addons-image] image.
+3. Retag the image as `codeclimate/codeclimate-cppcheck-addons:latest`.
+5. Configure your `.codeclimate.yml` file. See example below.
+6. You're ready to analyze! Browse into your project's folder and run
+   `CODECLIMATE_DEV=1 codeclimate analyze`.
+   1. Note that `read` / `write` permissions may need to be granted to
+      other users in the code directory to allow CodeClimate to write
+      new files. CodeClimate is configured to use `9000:9000` for the
+      engine user permissions.
 
 ## Configuration
 
@@ -108,8 +110,7 @@ For help with [Cppcheck][cppcheck], check out their documentation.
 
 If you're running into a Code Climate issue, first look over this project's
 GitHub Issues, as your question may have already been covered.
-If not, [go ahead and open a support ticket with us][codeclimate-help].
 
 [cppcheck]: http://cppcheck.sourceforge.net/
 [codeclimate-cli]: https://github.com/codeclimate/codeclimate
-[codeclimate-help]: https://codeclimate.com/help
+[cppcheck-addons-image]: https://github.com/lizalc/codeclimate-cppcheck-addons/pkgs/container/codeclimate%2Fcodeclimate-cppcheck-addons
