@@ -112,5 +112,5 @@ If you're running into a Code Climate issue, first look over this project's
 GitHub Issues, as your question may have already been covered.
 
 [cppcheck]: http://cppcheck.sourceforge.net/
-[codeclimate-cli]: https://github.com/codeclimate/codeclimate
+[codeclimate-cli]: https://github.com/lizalc/codeclimate
 [cppcheck-addons-image]: https://github.com/lizalc/codeclimate-cppcheck-addons/pkgs/container/codeclimate%2Fcodeclimate-cppcheck-addons
